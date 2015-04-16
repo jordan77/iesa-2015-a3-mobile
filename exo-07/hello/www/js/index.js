@@ -21,6 +21,7 @@ var app = {
     initialize: function() {
         this.bindEvents();
     },
+    
     // Bind Event Listeners
     //
     // Bind any events that are required on startup. Common events are:
@@ -28,12 +29,38 @@ var app = {
     bindEvents: function() {
         document.addEventListener('deviceready', this.onDeviceReady, false);
     },
+    
+    // check connection
+    
+checkConnection: function() {
+    var networkState = navigator.connection.type;
+    
+    var states = {};
+    states[Connection.UNKNOWN]  = 'Unknown connection';
+    states[Connection.ETHERNET] = 'Ethernet connection';
+    states[Connection.WIFI]     = 'WiFi connection';
+    states[Connection.CELL_2G]  = 'Cell 2G connection';
+    states[Connection.CELL_3G]  = 'Cell 3G connection';
+    states[Connection.CELL_4G]  = 'Cell 4G connection';
+    states[Connection.CELL]     = 'Cell generic connection';
+    states[Connection.NONE]     = 'No network connection';
+    
+    alert('Connection type: ' + states[networkState]);
+},
+    
     // deviceready Event Handler
     //
     // The scope of 'this' is the event. In order to call the 'receivedEvent'
     // function, we must explicitly call 'app.receivedEvent(...);'
     onDeviceReady: function() {
         app.receivedEvent('deviceready');
+        var element = document.getElementById('deviceProperties');
+        element.innerHTML = 'Device Model: '    + device.model    + '<br />' +
+        'Device Cordova: '  + device.cordova  + '<br />' +
+        'Device Platform: ' + device.platform + '<br />' +
+        'Device UUID: '     + device.uuid     + '<br />' +
+        'Device Version: '  + device.version  + '<br />';
+        app.checkConnection();
     },
     // Update DOM on a Received Event
     receivedEvent: function(id) {
@@ -48,7 +75,5 @@ var app = {
     }
 };
 
-function onDevice(){
-    setTimeout(function() { navigator.splashscreen.hide(); }, 2000;)}
 
 app.initialize();
